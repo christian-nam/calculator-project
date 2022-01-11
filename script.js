@@ -17,6 +17,9 @@ const equalsButton = document.getElementById('equalsBtn');
 const clear = () => {
     secondaryDisplay.textContent = ' ';
     currentDisplay.textContent = '0';
+    operand1 = '';
+    operand2 = '';
+    currentOperator = null;
 }
 
 const add = (num1, num2) => {
