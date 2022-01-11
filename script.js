@@ -68,6 +68,7 @@ const appendDecimal = () => {
 }
 
 const setOperator = (operator) => {
+    if (currentOperator !== null) evaluate();
     currentOperator = operator;
     operand1 = currentDisplay.textContent;
     secondaryDisplay.textContent = `${operand1} ${currentOperator}`;
@@ -84,13 +85,23 @@ const deleteNumber = () => {
 
 const evaluate = () => {
     if (currentOperator === null) return
-    if (currentOperator === '/' && currentDisplay.textContent === 0) {
-        alert("Error: Cannot divide by 0");
+    if (currentOperator === '/' && currentDisplay.textContent === '0') {
+        alert("Error: Cannot divide by 0!");
         return
     }
     operand2 = currentDisplay.textContent;
     currentDisplay.textContent = (operate(currentOperator, operand1, operand2));
     secondaryDisplay.textContent = `${operand1} ${currentOperator} ${operand2} =`;
+}
+
+const keyboardEventHandler = (e) => {
+    if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+    if (e.key === '+' || e.key === '-' || e.key === '/' || e.key === '*') setOperator(e.key);
+    if (e.key === '.') appendPoint();
+    if (e.key === '=' || e.key === 'Enter') evaluate();
+    if (e.key === 'Backspace') deleteNumber();
+    if (e.key === 'Escape') clear();
+    
 }
 
 numberButtons.forEach((button) => {
@@ -101,7 +112,9 @@ operatorButtons.forEach((button) => {
     button.addEventListener('click', () => setOperator(button.textContent));
 });
 
+window.addEventListener('keydown', keyboardEventHandler);
 decimalButton.addEventListener('click', appendDecimal);
 deleteButton.addEventListener('click', deleteNumber);
 clearButton.addEventListener('click', clear);
 equalsButton.addEventListener('click', evaluate);
+
